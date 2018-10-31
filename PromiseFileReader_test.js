@@ -4,14 +4,31 @@ const sinon = require('sinon')
 const {readAsDataURL, readAsText, readAsArrayBuffer} = require('./PromiseFileReader')
 describe('PromiseFileReader', () => {
   beforeEach(() => {
+    function mockProgress(fileReader) {
+      const total = 100;
+      for(let loaded=0; loaded < total; loaded += 1) {
+        fileReader.onprogress({
+          loaded,
+          total,
+          lengthComputable: true,
+        })
+      }
+    }
     Blob = class Blob{}
     File = class File extends Blob{}
     FileReader = class FileReader{
       onload() {}
       onerror() {}
-      readAsDataURL() {}
-      readAsText() {}
-      readAsArrayBuffer() {}
+      onprogress() {}
+      readAsDataURL() {
+        mockProgress(this);
+      }
+      readAsText() {
+        mockProgress(this);
+      }
+      readAsArrayBuffer() {
+        mockProgress(this);
+      }
     }
   })
 
@@ -41,6 +58,26 @@ describe('PromiseFileReader', () => {
 
       sinon.assert.calledOnce(callback);
       sinon.assert.calledWith(callback, mockBlob)
+    })
+    it('should report progress to options.progress if provided', () => {
+      const progress = sinon.spy();
+      const mockBlob = new Blob()
+      readAsDataURL(mockBlob, {progress});
+      sinon.assert.calledWith(progress, {
+        total: 100,
+        loaded: 0,
+        lengthComputable: true,
+      })
+      sinon.assert.calledWith(progress, {
+        total: 100,
+        loaded: 50,
+        lengthComputable: true,
+      })
+      sinon.assert.calledWith(progress, {
+        total: 100,
+        loaded: 99,
+        lengthComputable: true,
+      })
     })
   })
 

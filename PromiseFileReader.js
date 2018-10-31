@@ -1,4 +1,5 @@
-function readAs (file, as) {
+function readAs (file, options, as) {
+  options = options || {};
   if (!(file instanceof Blob)) {
     throw new TypeError('Must be a File or Blob')
   }
@@ -6,20 +7,23 @@ function readAs (file, as) {
     var reader = new FileReader()
     reader.onload = function(e) { resolve(e.target.result) }
     reader.onerror = function(e) { reject(new Error('Error reading' + file.name + ': ' + e.target.result)) }
+    if (options.progress) {
+      reader.onprogress = options.progress
+    }
     reader['readAs' + as](file)
   })
 }
 
-function readAsDataURL (file) {
-  return readAs(file, 'DataURL')
+function readAsDataURL (file, options) {
+  return readAs(file, options, 'DataURL')
 }
 
-function readAsText (file) {
-  return readAs(file, 'Text')
+function readAsText (file, options) {
+  return readAs(file, options, 'Text')
 }
 
-function readAsArrayBuffer (file) {
-  return readAs(file, 'ArrayBuffer')
+function readAsArrayBuffer (file, options) {
+  return readAs(file, options, 'ArrayBuffer')
 }
 
 module.exports = {
