@@ -1,5 +1,5 @@
 {
-  "name": "promise-file-reader",
+  "name": "@providenceinnovation/promise-file-reader",
   "version": "1.0.2",
   "description": "Wraps FileReader in a Promise",
   "main": "PromiseFileReader.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jahredhope/promise-file-reader.git"
+    "url": "git+https://github.com/providenceinnovation/promise-file-reader.git"
   },
   "keywords": [
     "Promise",
@@ -17,7 +17,7 @@
     "File API",
     "File"
   ],
-  "author": "Jahred Hope <jahredhope@gmail.com>",
+  "author": "Jahred Hope <jahredhope@gmail.com> and Thomas Hallock <thomas.hallock@providenceinnovation.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jahredhope/promise-file-reader/issues"
